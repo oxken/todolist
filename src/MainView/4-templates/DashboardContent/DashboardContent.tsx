@@ -2,14 +2,27 @@
 import { Box, Toolbar } from "@mui/material";
 import { DashboardContentProps } from "./DashboardContent.types";
 import AddForm from "../../../AddTODO/4-template/AddForm";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../../../redux/todoSlice";
+import List from "../../../List/4-template/List";
 
 //********** Component **********//
 const DashboardContent = (props: DashboardContentProps) => {
   const { selectedItemId } = props;
   let content;
+  const dispatch = useDispatch();
   switch (selectedItemId) {
     case "add":
-      content = <AddForm />;
+      content = (
+        <AddForm
+          onSubmitClick={(newTodo: string) => {
+            dispatch(addTodo({ id: Date.now(), text: newTodo }));
+          }}
+        />
+      );
+      break;
+    case "todoList":
+      content = <List />;
       break;
     default:
       content = <></>;

@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Exécution des tests
-        run: npm test -- --watchAll=false
+        run: npm test -- --watchAll=false --transformIgnorePatterns "node_modules/(?!(@mui)/)"
 
   sonar:
     runs-on: ubuntu-latest

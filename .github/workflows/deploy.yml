@@ -1,6 +1,5 @@
 name: Déploiement vers Vercel
 
-# Condition de déclenchement
 on:
   push:
     branches:
@@ -28,6 +27,11 @@ jobs:
       - name: Déploiement
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
           npm install -g vercel
-          vercel --prod --token $VERCEL_TOKEN --yes
+          vercel deploy --prod --yes --confirm \
+            --token $VERCEL_TOKEN \
+            --project $VERCEL_PROJECT_ID \
+            --org $VERCEL_ORG_ID

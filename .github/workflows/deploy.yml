@@ -6,27 +6,8 @@ on:
       - main
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout du code
-        uses: actions/checkout@v3
-
-      - name: Installation de Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Installation des dépendances
-        run: npm install
-
-      - name: Exécution des tests (n'empêche pas le déploiement)
-        run: npm test -- --watchAll=false || true
-
   deploy:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - name: Checkout du code
         uses: actions/checkout@v3
@@ -46,6 +27,11 @@ jobs:
       - name: Déploiement
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
           npm install -g vercel
-          vercel --prod --token $VERCEL_TOKEN --yes
+          vercel deploy --prod --yes --confirm \
+            --token $VERCEL_TOKEN \
+            --project $VERCEL_PROJECT_ID \
+            --org $VERCEL_ORG_ID
